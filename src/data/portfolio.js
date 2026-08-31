@@ -6,6 +6,7 @@ export const capabilities = [
     description: "Production-ready web products with thoughtful frontends, reliable APIs and clean database architecture.",
     stack: ["React", "Node.js", "Express", "MongoDB"],
     accent: "cyan",
+    image: "/images/services/web.webp",
   },
   {
     key: "mobile",
@@ -14,6 +15,7 @@ export const capabilities = [
     description: "Responsive mobile product experiences designed for both Android and iOS ecosystems.",
     stack: ["Flutter", "Dart", "React Native", "Expo"],
     accent: "violet",
+    image: "/images/services/mobile.webp",
   },
   {
     key: "games",
@@ -22,6 +24,7 @@ export const capabilities = [
     description: "Interactive mechanics, responsive controls and engaging playable experiences built with a feel-first approach.",
     stack: ["Unity", "C#", "JavaScript", "Game Systems"],
     accent: "orange",
+    image: "/images/services/games.webp",
   },
   {
     key: "design",
@@ -30,6 +33,16 @@ export const capabilities = [
     description: "Accessible interfaces with clear hierarchy, polished motion and reusable design systems.",
     stack: ["Figma", "Motion", "Accessibility", "Design Systems"],
     accent: "pink",
+    image: "/images/services/design.webp",
+  },
+  {
+    key: "automation",
+    title: "AI Automation",
+    eyebrow: "05 / Connected intelligence",
+    description: "Connecting tools, APIs and AI into practical workflows that handle repetitive tasks and keep business processes moving.",
+    stack: ["n8n", "Grok AI", "API Integrations", "Workflow Automation"],
+    accent: "cyan",
+    image: "/images/services/automation.webp",
   },
 ];
 
@@ -84,16 +97,18 @@ export const freelanceProfiles = {
 };
 
 export const techStack = [
-  "React",
-  "JavaScript",
-  "Tailwind CSS",
-  "Node.js",
-  "Express",
-  "MongoDB",
-  "Flutter",
-  "React Native",
-  "Unity",
-  "C#",
-  "Git",
-  "Figma",
+  { name: "React", logo: "react", category: "Web interfaces" },
+  { name: "n8n", logo: "n8n", category: "Workflow automation", wide: true },
+  { name: "Grok AI", logo: "grok", category: "AI integrations" },
+  { name: "JavaScript", logo: "javascript", category: "Application logic" },
+  { name: "Tailwind CSS", logo: "tailwindcss", category: "Interface styling" },
+  { name: "Node.js", logo: "nodejs", category: "Backend services" },
+  { name: "Express", logo: "express", category: "APIs & routing" },
+  { name: "MongoDB", logo: "mongodb", category: "Data storage" },
+  { name: "Flutter", logo: "flutter", category: "Cross-platform apps" },
+  { name: "React Native", logo: "react", category: "Native mobile apps" },
+  { name: "Unity", logo: "unity", category: "Interactive experiences" },
+  { name: "C#", logo: "csharp", category: "Game systems" },
+  { name: "Git", logo: "git", category: "Version control" },
+  { name: "Figma", logo: "figma", category: "Product design" },
 ];

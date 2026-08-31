@@ -1,12 +1,15 @@
-import { Code2, Gamepad2, Layers3, PenTool, Smartphone, Zap } from "lucide-react";
+import { Code2, Gamepad2, Layers3, PenTool, Smartphone, Workflow } from "lucide-react";
 import { motion } from "framer-motion";
-import { capabilities, techStack } from "../data/portfolio";
+import { capabilities } from "../data/portfolio";
+import WorkingStack from "./WorkingStack";
+import "./working-stack.css";
 
 const icons = {
   web: Code2,
   mobile: Smartphone,
   games: Gamepad2,
   design: PenTool,
+  automation: Workflow,
 };
 
 const reveal = { duration: 0.4, ease: "easeOut" };
@@ -24,7 +27,7 @@ export default function SkillsStudio() {
         >
           <span>Capabilities</span>
           <h2>One developer. Multiple dimensions.</h2>
-          <p>I bridge engineering and interaction to build cohesive products across web, mobile and playable experiences.</p>
+          <p>I connect engineering, design and AI automation to build thoughtful products across web, mobile and interactive experiences.</p>
         </motion.div>
 
         <div className="mt-14 grid gap-4 md:grid-cols-2">
@@ -39,8 +42,11 @@ export default function SkillsStudio() {
                 transition={{ ...reveal, delay: index * 0.06 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={"capability-card accent-" + capability.accent}
+                className={"capability-card capability-photo-card accent-" + capability.accent + (capability.key === "automation" ? " capability-featured" : "")}
               >
+                <img src={capability.image} alt="" width="960" height="640" loading="lazy" decoding="async" className="capability-background" />
+                <div className="capability-shade" aria-hidden="true" />
+                <div className="capability-copy">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <span className="card-eyebrow">{capability.eyebrow}</span>
@@ -54,28 +60,13 @@ export default function SkillsStudio() {
                     <span key={item} className="stack-pill">{item}</span>
                   ))}
                 </div>
+                </div>
               </motion.div>
             );
           })}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={reveal}
-          className="tech-ribbon mt-8"
-        >
-          <div className="flex items-center gap-2 text-sm font-bold text-slate-950 dark:text-white">
-            <Zap size={17} className="text-cyan-500" />
-            Working stack
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {techStack.map((technology) => (
-              <span key={technology} className="tech-chip">{technology}</span>
-            ))}
-          </div>
-        </motion.div>
+        <WorkingStack />
       </div>
     </section>
   );

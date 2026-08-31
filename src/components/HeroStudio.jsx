@@ -48,7 +48,7 @@ export default function HeroStudio() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...reveal, delay: 0.32 }} className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3">
             {[
               { icon: Layers3, value: "03", label: "Live products" },
-              { icon: Sparkles, value: "04+", label: "Core disciplines" },
+              { icon: Sparkles, value: "05", label: "Core disciplines" },
               { icon: ArrowUpRight, value: "∞", label: "Ideas in motion" },
             ].map(({ icon: Icon, value, label }) => (
               <div key={label} className="metric-card last:col-span-2 sm:last:col-span-1">
