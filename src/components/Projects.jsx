@@ -61,13 +61,14 @@ export default function Projects() {
             </div>
           </motion.div>
 
-          <motion.div layout className="grid gap-4">
+          <motion.div layout="position" layoutDependency={filter} className="grid gap-4">
             <AnimatePresence mode="popLayout">
               {visibleProjects.map((project, index) => {
                 const Icon = icons[project.id];
                 return (
                   <motion.article
-                    layout
+                    layout="position"
+                    layoutDependency={filter}
                     key={project.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

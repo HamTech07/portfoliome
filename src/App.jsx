@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { MotionConfig } from "framer-motion";
 import Navbar from "./components/NavbarStudio";
 import Hero from "./components/HeroStudio";
 import Skills from "./components/SkillsStudio";
@@ -13,6 +14,7 @@ const Projects = lazy(() => import("./components/Projects"));
 export default function App() {
   return (
     <ExperienceBoundary>
+      <MotionConfig reducedMotion="user">
       <div className="site-shell min-h-screen">
         <ScrollProgress />
         <Navbar />
@@ -27,6 +29,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      </MotionConfig>
     </ExperienceBoundary>
   );
 }

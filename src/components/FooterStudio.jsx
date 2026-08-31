@@ -1,9 +1,10 @@
 import { ArrowUp, BriefcaseBusiness, GitFork, Mail, Store } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { freelanceProfiles } from "../data/portfolio";
 
 export default function FooterStudio() {
-  const backToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const reducedMotion = useReducedMotion();
+  const backToTop = () => window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
 
   return (
     <footer className="studio-footer">

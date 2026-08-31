@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 
 const links = [
@@ -11,6 +11,7 @@ const links = [
 ];
 
 export default function NavbarStudio() {
+  const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(true);
   const [active, setActive] = useState("home");
@@ -50,7 +51,7 @@ export default function NavbarStudio() {
 
   const scrollTo = (href) => {
     setOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector(href)?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
   };
 
   return (
@@ -97,7 +98,7 @@ export default function NavbarStudio() {
           >
             Let's talk <ArrowUpRight size={15} />
           </motion.a>
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setOpen((value) => !value)} className="icon-button lg:hidden" aria-label="Toggle menu" aria-expanded={open}>
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setOpen((value) => !value)} className="icon-button mobile-menu-toggle" aria-label="Toggle menu" aria-expanded={open}>
             {open ? <X size={20} /> : <Menu size={20} />}
           </motion.button>
         </div>

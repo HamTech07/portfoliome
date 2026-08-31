@@ -1,15 +1,19 @@
 import { ArrowDownRight, ArrowUpRight, GitFork, Layers3, Sparkles } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { lazy, Suspense, useRef } from "react";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const reveal = { duration: 0.4, ease: "easeOut" };
 const DeveloperScene = lazy(() => import("./DeveloperScene"));
 
 export default function HeroStudio() {
   const sectionRef = useRef(null);
+  const sceneRef = useRef(null);
+  const sceneNearViewport = useInView(sceneRef, { once: true, margin: "160px" });
+  const enhancedMotion = useMediaQuery("(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const sceneY = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const sceneRotate = useTransform(scrollYProgress, [0, 1], [0, 9]);
+  const sceneY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const sceneRotate = useTransform(scrollYProgress, [0, 1], [0, 4]);
 
   return (
     <section ref={sectionRef} id="home" className="hero-section relative min-h-screen overflow-hidden px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -56,20 +60,22 @@ export default function HeroStudio() {
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...reveal, delay: 0.18 }}
-          style={{ y: sceneY, rotate: sceneRotate }}
-          className="scene-shell relative mx-auto w-full max-w-[620px]"
-        >
-          <div className="scene-glow" />
-          <Suspense fallback={<div className="scene-skeleton" aria-label="Loading 3D scene" />}>
-            <DeveloperScene />
-          </Suspense>
-          <div className="scene-label scene-label-top">Creative developer</div>
-          <div className="scene-label scene-label-bottom">Web · Apps · Games</div>
-        </motion.div>
+        <div ref={sceneRef} className="relative mx-auto w-full max-w-[620px]">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ...reveal, delay: 0.18 }}
+            style={enhancedMotion ? { y: sceneY, rotate: sceneRotate } : undefined}
+            className="scene-shell relative"
+          >
+            <div className="scene-glow" />
+            <Suspense fallback={<div className="scene-skeleton" aria-label="Loading 3D scene" />}>
+              {sceneNearViewport && <DeveloperScene />}
+            </Suspense>
+            <div className="scene-label scene-label-top">Creative developer</div>
+            <div className="scene-label scene-label-bottom">Web · Apps · Games</div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

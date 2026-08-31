@@ -13,6 +13,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
     color-scheme: light;
   }
 
@@ -43,7 +44,7 @@
   border: 1px solid rgba(203, 213, 225, 0.72);
   background: rgba(255, 255, 255, 0.76);
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(8px);
 }
 
 .dark .glass-nav {
@@ -79,7 +80,6 @@
 .hero-orb {
   position: absolute;
   border-radius: 999px;
-  filter: blur(90px);
   pointer-events: none;
 }
 
@@ -88,7 +88,7 @@
   right: 8%;
   width: 25rem;
   height: 25rem;
-  background: rgba(124, 92, 255, 0.18);
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.18), transparent 72%);
 }
 
 .hero-orb-two {
@@ -96,7 +96,7 @@
   left: 12%;
   width: 20rem;
   height: 20rem;
-  background: rgba(85, 230, 255, 0.1);
+  background: radial-gradient(circle, rgba(85, 230, 255, 0.1), transparent 72%);
 }
 
 .logo-mark {
@@ -274,7 +274,6 @@
   border: 1px solid rgba(148, 163, 184, 0.35);
   color: #334155;
   background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(16px);
 }
 
 .dark .secondary-button {
@@ -291,7 +290,6 @@
   border-radius: 1rem;
   padding: 0.85rem;
   background: rgba(255, 255, 255, 0.52);
-  backdrop-filter: blur(14px);
 }
 
 .dark .metric-card {
@@ -324,9 +322,8 @@
   background:
     radial-gradient(circle at 50% 45%, rgba(124, 92, 255, 0.12), transparent 52%),
     rgba(255, 255, 255, 0.34);
-  box-shadow: 0 45px 120px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
   isolation: isolate;
-  backdrop-filter: blur(12px);
 }
 
 .dark .scene-shell {
@@ -334,7 +331,7 @@
   background:
     radial-gradient(circle at 50% 45%, rgba(124, 92, 255, 0.13), transparent 52%),
     rgba(255, 255, 255, 0.018);
-  box-shadow: 0 45px 120px rgba(0, 0, 0, 0.52);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .scene-glow {
@@ -342,8 +339,7 @@
   inset: 12% 18%;
   z-index: -1;
   border-radius: 999px;
-  background: rgba(85, 230, 255, 0.08);
-  filter: blur(50px);
+  background: radial-gradient(ellipse, rgba(85, 230, 255, 0.08), transparent 72%);
 }
 
 .scene-label {
@@ -357,7 +353,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  backdrop-filter: blur(14px);
+  pointer-events: none;
 }
 
 .dark .scene-label {
@@ -373,6 +369,36 @@
 .scene-label-bottom {
   bottom: 1.2rem;
   left: 1.2rem;
+}
+
+.scene-canvas {
+  contain: layout paint;
+  border-radius: inherit;
+}
+
+.scene-ground-shadow {
+  position: absolute;
+  bottom: 7%;
+  left: 18%;
+  width: 64%;
+  height: 12%;
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgba(39, 22, 94, 0.3), transparent 68%);
+}
+
+.scene-fallback {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: 2rem;
+  color: #64748b;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
 }
 
 .scene-skeleton {
@@ -491,7 +517,7 @@
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  transition: border-color 180ms ease;
 }
 
 .capability-card::after {
@@ -501,9 +527,8 @@
   width: 14rem;
   height: 14rem;
   border-radius: 999px;
-  background: var(--card-accent);
+  background: radial-gradient(circle, var(--card-accent), transparent 70%);
   content: "";
-  filter: blur(55px);
   opacity: 0.15;
 }
 
@@ -717,7 +742,6 @@
   background: rgba(4, 7, 15, 0.42);
   font-size: 0.62rem;
   font-weight: 700;
-  backdrop-filter: blur(10px);
 }
 
 .project-content {
@@ -816,7 +840,7 @@
   justify-content: center;
   padding-top: 4rem;
   background: rgba(2, 4, 10, 0.76);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(4px);
 }
 
 .project-dialog {
@@ -985,8 +1009,7 @@
   position: absolute;
   inset: 12% 7% -3%;
   border-radius: 2rem;
-  background: linear-gradient(135deg, rgba(85, 230, 255, 0.22), rgba(124, 92, 255, 0.22));
-  filter: blur(40px);
+  background: radial-gradient(ellipse, rgba(124, 92, 255, 0.22), transparent 72%);
 }
 
 .portrait-frame {
@@ -1030,7 +1053,7 @@
   color: #cbd5e1;
   background: rgba(8, 10, 18, 0.72);
   font-size: 0.72rem;
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(6px);
 }
 
 .portrait-caption strong {
@@ -1138,7 +1161,6 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
     rgba(11, 13, 22, 0.82);
   box-shadow: 0 45px 140px rgba(0, 0, 0, 0.38);
-  backdrop-filter: blur(18px);
 }
 
 .contact-card::after {
@@ -1148,9 +1170,8 @@
   width: 28rem;
   height: 28rem;
   border-radius: 999px;
-  background: rgba(124, 92, 255, 0.18);
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.18), transparent 72%);
   content: "";
-  filter: blur(70px);
 }
 
 .contact-eyebrow {
@@ -1388,6 +1409,31 @@
 .skeleton-card {
   min-height: 18rem;
   border-radius: 1.5rem;
+}
+
+/* Touch scrolling should not re-filter the page behind fixed glass surfaces. */
+@media (max-width: 767px), (pointer: coarse) {
+  .glass-nav,
+  .mobile-nav,
+  .project-dialog-backdrop,
+  .portrait-caption {
+    backdrop-filter: none;
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.97);
+  }
+
+  .dark .glass-nav {
+    background: rgba(8, 10, 18, 0.97);
+  }
+
+  .scene-shell,
+  .dark .scene-shell,
+  .portrait-frame,
+  .dark .portrait-frame {
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+  }
 }
 
 @media (min-width: 640px) {
