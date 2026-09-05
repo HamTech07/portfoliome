@@ -89,6 +89,23 @@ export const projects = [
     solution: "A bold platform experience that balances competitive visuals with clear event content and practical responsive layouts.",
     highlights: ["Tournament-focused experience", "High-energy visual language", "Phone and desktop layouts"],
   },
+  {
+    id: "caloverse",
+    number: "04",
+    title: "Caloverse",
+    category: "Mobile App",
+    description: "A downloadable Android application built as a focused mobile experience. Install the APK to explore the latest Caloverse build.",
+    url: "https://drive.google.com/file/d/1v2jXCsqX8c9IbFXfUUNiOPLxvYSaZfYe/view?usp=drive_link",
+    downloadUrl: "https://drive.usercontent.google.com/download?id=1v2jXCsqX8c9IbFXfUUNiOPLxvYSaZfYe&export=download&confirm=t",
+    downloadName: "caloverse.apk",
+    domain: "Android APK",
+    tags: ["Mobile App", "Android", "APK"],
+    accent: "pink",
+    role: "Mobile app development",
+    challenge: "Turn the Caloverse concept into an installable mobile experience that can be shared directly with Android users.",
+    solution: "A packaged Android build with a direct portfolio download path and a mobile-first product experience.",
+    highlights: ["Installable Android build", "Direct APK access", "Mobile-first experience"],
+  },
 ];
 
 export const freelanceProfiles = {

@@ -1,10 +1,10 @@
-import { ArrowUpRight, CheckCircle2, Eye, Leaf, ShoppingBag, Trophy, X } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Download, Eye, Leaf, ShoppingBag, Smartphone, Trophy, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { projects } from "../data/portfolio";
 
-const filters = ["All", "Commerce", "Web Experience", "Tournament Platform"];
-const icons = { juna: ShoppingBag, ecourish: Leaf, besports: Trophy };
+const filters = ["All", "Commerce", "Web Experience", "Tournament Platform", "Mobile App"];
+const icons = { juna: ShoppingBag, ecourish: Leaf, besports: Trophy, caloverse: Smartphone };
 const reveal = { duration: 0.4, ease: "easeOut" };
 
 export default function Projects() {
@@ -43,7 +43,7 @@ export default function Projects() {
             <div className="section-heading">
               <span>Selected work</span>
               <h2>Live ideas, shipped to the web.</h2>
-              <p>Three focused products shaped around strong usability, responsiveness and a clear visual identity.</p>
+              <p>Four focused products across web and mobile, shaped around usability, responsiveness and a clear visual identity.</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-2" aria-label="Filter projects">
               {filters.map((item) => (
@@ -76,7 +76,20 @@ export default function Projects() {
                     transition={{ ...reveal, delay: index * 0.05 }}
                     className={"project-card accent-" + project.accent}
                   >
-                    <motion.button
+                    {project.downloadUrl ? <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href={project.downloadUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      download={project.downloadName}
+                      className="project-visual"
+                      aria-label={"Download " + project.title + " Android APK"}
+                    >
+                      <span className="project-number">{project.number}</span>
+                      <div className="project-glyph"><Icon size={30} /></div>
+                      <span className="project-domain"><Download size={13} /> {project.domain}</span>
+                    </motion.a> : <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedProject(project)}
@@ -86,7 +99,7 @@ export default function Projects() {
                       <span className="project-number">{project.number}</span>
                       <div className="project-glyph"><Icon size={30} /></div>
                       <span className="project-domain">{new URL(project.url).hostname}</span>
-                    </motion.button>
+                    </motion.button>}
                     <div className="project-content">
                       <span className="card-eyebrow">{project.category}</span>
                       <h3>{project.title}</h3>
@@ -107,13 +120,14 @@ export default function Projects() {
                         <motion.a
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          href={project.url}
+                          href={project.downloadUrl ?? project.url}
                           target="_blank"
                           rel="noreferrer"
                           className="project-link"
-                          aria-label={"Open " + project.title + " live website"}
+                          download={project.downloadName}
+                          aria-label={project.downloadUrl ? "Download " + project.title + " Android APK" : "Open " + project.title + " live website"}
                         >
-                          Live website <ArrowUpRight size={17} />
+                          {project.downloadUrl ? <><Download size={17} /> Download APK</> : <>Live website <ArrowUpRight size={17} /></>}
                         </motion.a>
                       </div>
                     </div>
@@ -178,8 +192,8 @@ export default function Projects() {
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.tags.map((tag) => <span key={tag} className="stack-pill">{tag}</span>)}
                 </div>
-                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.url} target="_blank" rel="noreferrer" className="primary-button">
-                  Open live website <ArrowUpRight size={17} />
+                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.downloadUrl ?? selectedProject.url} target="_blank" rel="noreferrer" download={selectedProject.downloadName} className="primary-button">
+                  {selectedProject.downloadUrl ? <><Download size={17} /> Download Android APK</> : <>Open live website <ArrowUpRight size={17} /></>}
                 </motion.a>
               </div>
             </motion.div>

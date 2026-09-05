@@ -11,14 +11,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/fiber": "^9.7.0",
     "@tailwindcss/vite": "^4.3.3",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.37.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "tailwindcss": "^4.3.3",
-    "three": "^0.185.1"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
