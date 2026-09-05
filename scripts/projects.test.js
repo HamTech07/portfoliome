@@ -2,13 +2,15 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { projects } from "../src/data/portfolio.js";
 
-test("portfolio includes the public Caloverse Android download", () => {
+test("portfolio includes the public Caloverse download folder", () => {
   assert.equal(projects.length, 4);
+
   const caloverse = projects.find(({ id }) => id === "caloverse");
+  const folderUrl =
+    "https://drive.google.com/drive/folders/16d8ICzhwzMAsGgWNza-G3SeoLjOug-E0?usp=sharing";
 
   assert.ok(caloverse);
   assert.equal(caloverse.category, "Mobile App");
-  assert.equal(caloverse.downloadName, "caloverse.apk");
-  assert.match(caloverse.downloadUrl, /^https:\/\/drive\.usercontent\.google\.com\/download\?/);
-  assert.match(caloverse.downloadUrl, /1v2jXCsqX8c9IbFXfUUNiOPLxvYSaZfYe/);
+  assert.equal(caloverse.url, folderUrl);
+  assert.equal(caloverse.downloadUrl, folderUrl);
 });
