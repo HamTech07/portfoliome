@@ -82,7 +82,7 @@
 }
 .orbit-stage.is-dragging { cursor: grabbing; }
 .orbit-plane { position: absolute; left: 50%; top: 38%; width: 0; height: 0; transform: rotateX(-12deg); transform-style: preserve-3d; }
-.orbit-rotor { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
+.orbit-rotor { position: relative; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
 .orbit-node {
   position: absolute;
   top: -64px;
@@ -100,6 +100,7 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   box-shadow: 0 6px 16px rgba(4, 15, 35, 0.1);
+  transform-style: preserve-3d;
 }
 .dark .orbit-node { border-color: #40516b; background: #f5f8ff; }
 .orbit-logo-pad { display: flex; align-items: center; justify-content: center; width: 112px; height: 52px; border-radius: 0.7rem; background: #fff; }

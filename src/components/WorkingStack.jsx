@@ -30,10 +30,8 @@ export default function WorkingStack() {
   const dragFrame = useRef(null);
   const [active, setActive] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
   const reducedMotion = useReducedMotion();
-  const playing = active && !paused && !hovered && !focused && !reducedMotion;
+  const playing = active && !paused && !reducedMotion;
 
   useEffect(() => {
     const orbit = createOrbitController(rotor.current);
@@ -53,12 +51,18 @@ export default function WorkingStack() {
   }, [playing]);
 
   const rotate = (direction) => {
-    setPaused(true);
-    controller.current?.rotateBy(direction * layout.step);
+    if (reducedMotion) {
+      controller.current?.rotateBy(direction * layout.step);
+      return;
+    }
+    controller.current?.stepBy(direction * layout.step, () => {
+      if (playing) controller.current?.play();
+    });
   };
 
   const endDrag = (event) => {
     if (!drag.current || event.pointerId !== drag.current.id) return;
+    const shouldResume = drag.current.dragging && drag.current.resume;
     if (drag.current.next !== undefined) controller.current?.setAngle(drag.current.next);
     drag.current = null;
     cancelAnimationFrame(dragFrame.current);
@@ -67,6 +71,7 @@ export default function WorkingStack() {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     event.currentTarget.classList.remove("is-dragging");
+    if (shouldResume) controller.current?.play();
   };
 
   return (
@@ -79,12 +84,12 @@ export default function WorkingStack() {
         </div>
         <div className="orbit-controls" aria-label="Working stack rotation controls">
           <button type="button" onClick={() => rotate(1)} aria-label="Rotate stack left"><ArrowLeft size={17} /></button>
-          <button type="button" className="orbit-play" onClick={() => setPaused((value) => !value)} disabled={Boolean(reducedMotion)} aria-label={paused ? "Start automatic stack rotation" : "Pause automatic stack rotation"} aria-pressed={!paused && !reducedMotion}>
+          <button type="button" className="orbit-play" onClick={() => setPaused((value) => !value)} disabled={Boolean(reducedMotion)} aria-label={paused ? "Resume automatic stack rotation" : "Pause automatic stack rotation"} aria-pressed={paused}>
             {paused || reducedMotion ? <Play size={15} /> : <Pause size={15} />}
-            <span>{reducedMotion ? "Manual mode" : paused ? "Auto rotate" : "Pause"}</span>
+            <span>{reducedMotion ? "Motion reduced" : paused ? "Resume" : "Pause"}</span>
           </button>
           <button type="button" onClick={() => rotate(-1)} aria-label="Rotate stack right"><ArrowRight size={17} /></button>
-          <button type="button" onClick={() => { setPaused(true); controller.current?.setAngle(0); }} aria-label="Reset stack rotation"><RotateCcw size={16} /></button>
+          <button type="button" onClick={() => { controller.current?.setAngle(0); if (playing) controller.current?.play(); }} aria-label="Reset stack rotation"><RotateCcw size={16} /></button>
         </div>
       </div>
 
@@ -94,25 +99,19 @@ export default function WorkingStack() {
         role="group"
         aria-label="Interactive 360-degree working stack"
         aria-describedby="orbit-instructions"
-        onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
-        onPointerLeave={() => setHovered(false)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
             event.preventDefault();
             rotate(event.key === "ArrowLeft" ? 1 : -1);
           } else if (event.key === "Home") {
             event.preventDefault();
-            setPaused(true);
             controller.current?.setAngle(0);
+            if (playing) controller.current?.play();
           }
         }}
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0) return;
-          setPaused(true);
-          controller.current?.pause();
-          drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, angle: controller.current?.getAngle() ?? 0 };
+          drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY, angle: controller.current?.getAngle() ?? 0, resume: playing, dragging: false };
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
         onPointerMove={(event) => {
@@ -120,6 +119,11 @@ export default function WorkingStack() {
           if (!current || current.id !== event.pointerId) return;
           const dx = event.clientX - current.x;
           if (Math.abs(dx) < 5 || Math.abs(dx) < Math.abs(event.clientY - current.y)) return;
+          if (!current.dragging) {
+            current.dragging = true;
+            controller.current?.pause();
+            current.angle = controller.current?.getAngle() ?? current.angle;
+          }
           current.next = current.angle + dx * 0.32;
           event.currentTarget.classList.add("is-dragging");
           if (dragFrame.current !== null) return;
@@ -158,7 +162,7 @@ export default function WorkingStack() {
         <span className="orbit-status"><i className={playing ? "is-live" : ""} />{playing ? "Live rotation" : "Rotation paused"}</span>
       </div>
 
-      <details className="stack-directory" onToggle={(event) => { if (event.currentTarget.open) setPaused(true); }}>
+      <details className="stack-directory">
         <summary>Explore all {techStack.length} technologies</summary>
         <div className="stack-directory-grid">
           {techStack.map((technology) => (

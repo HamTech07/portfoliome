@@ -8,6 +8,8 @@ import Contact from "./components/ContactStudio";
 import Footer from "./components/FooterStudio";
 import { ExperienceBoundary, SectionSkeleton } from "./components/ExperienceBoundary";
 import ScrollProgress from "./components/ScrollProgress";
+import LiveBackground from "./components/LiveBackground";
+import "./components/live-background.css";
 
 const Projects = lazy(() => import("./components/Projects"));
 
@@ -16,6 +18,7 @@ export default function App() {
     <ExperienceBoundary>
       <MotionConfig reducedMotion="user">
       <div className="site-shell min-h-screen">
+        <LiveBackground />
         <ScrollProgress />
         <Navbar />
         <main>

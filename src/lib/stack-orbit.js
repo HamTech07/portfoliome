@@ -18,8 +18,17 @@ export function orbitLayout(count) {
 export function createOrbitController(element) {
   let angle = 0;
   let animation = null;
+  let stepAnimation = null;
   const write = () => { element.style.transform = "rotateY(" + angle + "deg)"; };
+  const cancelStep = () => {
+    if (!stepAnimation) return;
+    stepAnimation.onfinish = null;
+    stepAnimation.cancel();
+    stepAnimation = null;
+    write();
+  };
   const pause = () => {
+    cancelStep();
     if (!animation) return;
     angle = angleAtTime(angle, animation.currentTime);
     animation.cancel();
@@ -28,7 +37,7 @@ export function createOrbitController(element) {
   };
   return {
     play() {
-      if (animation || typeof element.animate !== "function") return;
+      if (animation || stepAnimation || typeof element.animate !== "function") return;
       animation = element.animate([
         { transform: "rotateY(" + angle + "deg)" },
         { transform: "rotateY(" + (angle - 360) + "deg)" },
@@ -47,6 +56,28 @@ export function createOrbitController(element) {
       pause();
       angle = normalizeAngle(angle + delta);
       write();
+    },
+    stepBy(delta, onComplete) {
+      pause();
+      const start = angle;
+      const end = start + delta;
+      angle = normalizeAngle(end);
+      if (typeof element.animate !== "function") {
+        write();
+        onComplete?.();
+        return;
+      }
+      const currentStep = element.animate([
+        { transform: "rotateY(" + start + "deg)" },
+        { transform: "rotateY(" + end + "deg)" },
+      ], { duration: 460, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" });
+      stepAnimation = currentStep;
+      currentStep.onfinish = () => {
+        if (stepAnimation !== currentStep) return;
+        stepAnimation = null;
+        write();
+        onComplete?.();
+      };
     },
     dispose: pause,
   };

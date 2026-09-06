@@ -58,6 +58,23 @@ test("manual dragging and arrow steps wrap through a full 360 degrees in either 
   assert.equal(animations.length, 1, "manual input never starts an extra animation");
 });
 
+test("arrow navigation animates the whole rotor and can resume autoplay", () => {
+  const { element, animations } = createElement();
+  const orbit = createOrbitController(element);
+  let resumed = false;
+
+  orbit.play();
+  orbit.stepBy(orbitLayout(techStack.length).step, () => { resumed = true; });
+
+  assert.equal(animations.length, 2);
+  assert.deepEqual(Object.keys(animations[1].keyframes[0]), ["transform"]);
+  assert.equal(animations[1].options.duration, 460);
+  assert.equal(animations[1].options.fill, "forwards");
+  animations[1].animation.onfinish();
+  assert.equal(resumed, true);
+  assert.match(element.style.transform, /^rotateY\(/);
+});
+
 test("the connected ring closes and remains numerically stable over long sessions", () => {
   const layout = orbitLayout(14);
   assert.equal(layout.step * 14, 360);

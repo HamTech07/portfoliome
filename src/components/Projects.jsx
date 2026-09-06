@@ -1,4 +1,4 @@
-import { ArrowUpRight, CheckCircle2, Download, Eye, Leaf, ShoppingBag, Smartphone, Trophy, X } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Eye, FolderOpen, Leaf, ShoppingBag, Smartphone, Trophy, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { projects } from "../data/portfolio";
@@ -82,13 +82,12 @@ export default function Projects() {
                       href={project.downloadUrl}
                       target="_blank"
                       rel="noreferrer"
-                      download={project.downloadName}
                       className="project-visual"
-                      aria-label={"Download " + project.title + " Android APK"}
+                      aria-label={"Open " + project.title + " APK folder"}
                     >
                       <span className="project-number">{project.number}</span>
                       <div className="project-glyph"><Icon size={30} /></div>
-                      <span className="project-domain"><Download size={13} /> {project.domain}</span>
+                      <span className="project-domain"><FolderOpen size={13} /> {project.domain}</span>
                     </motion.a> : <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -124,10 +123,9 @@ export default function Projects() {
                           target="_blank"
                           rel="noreferrer"
                           className="project-link"
-                          download={project.downloadName}
-                          aria-label={project.downloadUrl ? "Download " + project.title + " Android APK" : "Open " + project.title + " live website"}
+                          aria-label={project.downloadUrl ? "Open " + project.title + " APK folder" : "Open " + project.title + " live website"}
                         >
-                          {project.downloadUrl ? <><Download size={17} /> Download APK</> : <>Live website <ArrowUpRight size={17} /></>}
+                          {project.downloadUrl ? <><FolderOpen size={17} /> APK folder</> : <>Live website <ArrowUpRight size={17} /></>}
                         </motion.a>
                       </div>
                     </div>
@@ -192,8 +190,8 @@ export default function Projects() {
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.tags.map((tag) => <span key={tag} className="stack-pill">{tag}</span>)}
                 </div>
-                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.downloadUrl ?? selectedProject.url} target="_blank" rel="noreferrer" download={selectedProject.downloadName} className="primary-button">
-                  {selectedProject.downloadUrl ? <><Download size={17} /> Download Android APK</> : <>Open live website <ArrowUpRight size={17} /></>}
+                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.downloadUrl ?? selectedProject.url} target="_blank" rel="noreferrer" className="primary-button">
+                  {selectedProject.downloadUrl ? <><FolderOpen size={17} /> Open APK folder</> : <>Open live website <ArrowUpRight size={17} /></>}
                 </motion.a>
               </div>
             </motion.div>

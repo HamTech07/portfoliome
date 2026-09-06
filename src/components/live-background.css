@@ -1,0 +1,172 @@
+.site-shell {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+}
+
+.site-shell > main,
+.site-shell > footer {
+  position: relative;
+  z-index: 1;
+}
+
+.live-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #f4f7fb;
+  contain: strict;
+}
+
+.dark .live-background {
+  background: #060910;
+}
+
+.live-background-grid {
+  position: absolute;
+  inset: -72px;
+  opacity: 0.6;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 92%);
+  will-change: transform;
+  animation: ambient-grid-drift 18s linear infinite;
+}
+
+.dark .live-background-grid {
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+}
+
+.ambient-ribbon {
+  position: absolute;
+  left: -24vw;
+  width: 148vw;
+  height: 32vh;
+  min-height: 16rem;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent 8%, rgba(34, 211, 238, 0.15) 34%, rgba(139, 92, 246, 0.18) 62%, transparent 92%);
+  box-shadow: inset 0 0 70px rgba(34, 211, 238, 0.06);
+  opacity: 0.62;
+  will-change: transform;
+}
+
+.ambient-ribbon-one {
+  top: 13%;
+  animation: ambient-ribbon-one 20s ease-in-out infinite alternate;
+}
+
+.ambient-ribbon-two {
+  bottom: 7%;
+  border-color: rgba(244, 114, 182, 0.17);
+  background: linear-gradient(90deg, transparent 6%, rgba(139, 92, 246, 0.12) 35%, rgba(244, 114, 182, 0.16) 66%, transparent 94%);
+  animation: ambient-ribbon-two 24s ease-in-out infinite alternate;
+}
+
+.ambient-stream {
+  position: absolute;
+  width: min(70vw, 58rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0.3;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.ambient-stream-cyan {
+  top: -24rem;
+  left: -18rem;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.72), rgba(34, 211, 238, 0.12) 42%, transparent 69%);
+  animation: ambient-drift-cyan 22s ease-in-out infinite alternate;
+}
+
+.ambient-stream-violet {
+  top: 32%;
+  right: -25rem;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.68), rgba(124, 92, 255, 0.1) 44%, transparent 70%);
+  animation: ambient-drift-violet 28s ease-in-out infinite alternate;
+}
+
+.ambient-stream-warm {
+  bottom: -28rem;
+  left: 20%;
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.5), rgba(251, 146, 60, 0.09) 45%, transparent 70%);
+  animation: ambient-drift-warm 25s ease-in-out infinite alternate;
+}
+
+.dark .ambient-stream { opacity: 0.38; }
+
+.ambient-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  background-image: radial-gradient(circle at center, currentColor 0.7px, transparent 0.8px);
+  background-size: 7px 7px;
+}
+
+@keyframes ambient-drift-cyan {
+  to { transform: translate3d(24vw, 17vh, 0) scale(1.08); }
+}
+
+@keyframes ambient-drift-violet {
+  to { transform: translate3d(-28vw, 14vh, 0) scale(0.92); }
+}
+
+@keyframes ambient-drift-warm {
+  to { transform: translate3d(12vw, -22vh, 0) scale(1.12); }
+}
+
+@keyframes ambient-grid-drift {
+  to { transform: translate3d(72px, 72px, 0); }
+}
+
+@keyframes ambient-ribbon-one {
+  from { transform: translate3d(-4vw, -2vh, 0) rotate(-9deg) scale(0.98); }
+  to { transform: translate3d(8vw, 12vh, 0) rotate(-4deg) scale(1.04); }
+}
+
+@keyframes ambient-ribbon-two {
+  from { transform: translate3d(7vw, 5vh, 0) rotate(7deg) scale(1.03); }
+  to { transform: translate3d(-6vw, -10vh, 0) rotate(3deg) scale(0.97); }
+}
+
+.section-shell,
+.section-tinted {
+  background: rgba(244, 247, 251, 0.48) !important;
+}
+
+.dark .section-shell,
+.dark .section-tinted {
+  background: rgba(6, 9, 16, 0.48) !important;
+}
+
+.contact-section,
+.studio-footer {
+  background: rgba(6, 8, 16, 0.72) !important;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .ambient-stream {
+    width: 34rem;
+    opacity: 0.15;
+  }
+
+  .dark .ambient-stream { opacity: 0.2; }
+  .ambient-stream-warm { display: none; }
+  .live-background-grid { background-size: 54px 54px; animation-duration: 24s; }
+  .ambient-ribbon { left: -48vw; width: 196vw; opacity: 0.48; }
+  .ambient-ribbon-two { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-stream,
+  .ambient-ribbon,
+  .live-background-grid { animation: none; }
+}
