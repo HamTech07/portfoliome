@@ -187,6 +187,17 @@
   .caloverse-gallery-track { animation-duration: 52s; }
 }
 
+@media (max-width: 639px) {
+  .capability-project-tile {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .capability-project-icon { margin-inline: auto; }
+  .capability-project-tile > svg:last-child { color: var(--card-accent); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .caloverse-gallery { overflow-x: auto; mask-image: none; }
   .caloverse-gallery-track { animation: none; }

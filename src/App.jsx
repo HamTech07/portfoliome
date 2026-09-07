@@ -9,6 +9,7 @@ import Footer from "./components/FooterStudio";
 import { ExperienceBoundary, SectionSkeleton } from "./components/ExperienceBoundary";
 import ScrollProgress from "./components/ScrollProgress";
 import LiveBackground from "./components/LiveBackground";
+import PortfolioAssistant from "./components/PortfolioAssistant";
 import "./components/live-background.css";
 
 const Projects = lazy(() => import("./components/Projects"));
@@ -31,6 +32,7 @@ export default function App() {
           <Contact />
         </main>
         <Footer />
+        <PortfolioAssistant />
       </div>
       </MotionConfig>
     </ExperienceBoundary>

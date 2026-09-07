@@ -1,58 +1,47 @@
-# Muhammad Hamdan Amir — Portfolio (React + Framer Motion)
+# Muhammad Hamdan Amir — Portfolio
 
-A React (Vite) rebuild of the portfolio with physics-based motion using
-**Framer Motion** (spring animations, scroll-reveal, magnetic tilt cards).
+A responsive React portfolio with Framer Motion, Tailwind CSS, interactive capability showcases, an animated working stack and a Gemini-powered portfolio assistant.
 
-## Tech Stack
-- React 19 + Vite
-- Tailwind CSS v4
-- Framer Motion (spring physics animations)
-- Font Awesome icons
+## Run the portfolio locally
 
-## Project Structure
-```
-hamdan-portfolio/
-├── public/
-│   └── images/
-│       └── Profile1.jpeg      <- profile photo lives here
-├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── Skills.jsx
-│   │   ├── TiltCard.jsx       <- reusable physics tilt-card wrapper
-│   │   ├── About.jsx
-│   │   ├── Contact.jsx
-│   │   └── Footer.jsx
-│   ├── data/
-│   │   └── content.js         <- edit skills, tech stack, socials here
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── vite.config.js
-└── package.json
-```
-
-## Run locally
 ```bash
 npm install
 npm run dev
 ```
-Open the printed local URL (usually http://localhost:5173).
 
-## Build for production
+The Vite app runs on `http://127.0.0.1:5173` or the URL printed in the terminal.
+
+## Run the AI assistant backend locally
+
+Copy `.env.example` to `.env`, add your own Gemini API key from Google AI Studio, then load the environment variables and run:
+
 ```bash
+npm run server
+```
+
+The backend listens on port `8787`. Vite proxies `/api` to this local service.
+
+## Deploy the backend to Render
+
+This repository includes `render.yaml`. Create a Render Blueprint/Web Service from the GitHub repository and configure:
+
+- `GEMINI_API_KEY`: your secret key from Google AI Studio.
+- `GEMINI_MODEL`: `gemini-2.5-flash-lite` for the supported free-tier model.
+- `MAX_DAILY_REQUESTS`: a server-side safety cap such as `200`.
+- `ALLOWED_ORIGINS`: the exact Vercel portfolio URL. Multiple origins can be comma-separated.
+
+After Render deploys, set this variable in the Vercel frontend project and redeploy it:
+
+```text
+VITE_ASSISTANT_API_URL=https://your-render-service.onrender.com/api/chat
+```
+
+Never place `GEMINI_API_KEY` in a `VITE_` variable or commit it to Git. The Gemini free tier is quota-limited and its prompts may be used to improve Google products, so the assistant warns visitors not to share sensitive information.
+
+## Validation
+
+```bash
+npm test
+npm run lint
 npm run build
 ```
-This creates a `dist/` folder — deploy that to Netlify, Vercel, or GitHub Pages.
-
-## Deploying to Netlify
-- Drag-and-drop the `dist` folder onto Netlify, OR
-- Connect the GitHub repo and set:
-  - Build command: `npm run build`
-  - Publish directory: `dist`
-
-## Editing content
-Almost everything (skills, tech logos, email/GitHub links) lives in
-`src/data/content.js` — no need to touch the components to update text.

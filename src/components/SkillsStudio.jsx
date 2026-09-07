@@ -1,4 +1,4 @@
-import { ArrowUpRight, Bot, Code2, FolderOpen, Gamepad2, Layers3, PenTool, Smartphone, Workflow, X } from "lucide-react";
+import { ArrowUpRight, Bot, Code2, Download, Gamepad2, Layers3, PenTool, Smartphone, Workflow, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { capabilities, projects } from "../data/portfolio";
@@ -26,8 +26,8 @@ const capabilityWork = {
     projectIds: ["caloverse"],
   },
   automation: {
-    summary: "Connected commerce thinking applied to smarter product workflows.",
-    projectIds: ["juna"],
+    summary: "Live AI experiences and connected commerce thinking applied to smarter product workflows.",
+    projectIds: ["ai-agile", "juna"],
   },
   design: {
     summary: "Caloverse UI/UX screens shaped around calm nutrition tracking and clear daily actions.",
@@ -50,7 +50,7 @@ const caloverseScreens = [
 ];
 
 function ProjectTile({ project }) {
-  const Icon = project.id === "juna" ? Bot : project.id === "caloverse" ? Smartphone : Code2;
+  const Icon = ["juna", "ai-agile"].includes(project.id) ? Bot : project.id === "caloverse" ? Smartphone : Code2;
   const isDownloadFolder = Boolean(project.downloadUrl);
 
   return (
@@ -68,7 +68,7 @@ function ProjectTile({ project }) {
         <strong>{project.title}</strong>
         <small>{project.description}</small>
       </div>
-      {isDownloadFolder ? <FolderOpen size={18} /> : <ArrowUpRight size={18} />}
+      {isDownloadFolder ? <Download size={18} /> : <ArrowUpRight size={18} />}
     </motion.a>
   );
 }
