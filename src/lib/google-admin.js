@@ -31,3 +31,16 @@ export async function googleSignOut() {
   const client = await getGoogleClient();
   if (client) { const { error } = await client.auth.signOut({ scope: "local" }); if (error) throw error; }
 }
+
+export async function uploadAdminFile(file) {
+  const client = await getGoogleClient();
+  if (!client) throw new Error("Supabase is not configured.");
+  const { data } = await client.auth.getSession();
+  if (!data.session) throw new Error("Sign in before uploading files.");
+  const extension = file.name.toLowerCase().match(/\.(jpg|jpeg|png|webp|apk)$/)?.[0];
+  if (!extension) throw new Error("Upload a JPG, PNG, WebP or APK file.");
+  const path = `${crypto.randomUUID()}${extension}`;
+  const { error } = await client.storage.from("portfolio-media").upload(path, file, { contentType: file.type || undefined, upsert: false });
+  if (error) throw new Error(error.message);
+  return client.storage.from("portfolio-media").getPublicUrl(path).data.publicUrl;
+}

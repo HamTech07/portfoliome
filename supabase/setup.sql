@@ -190,3 +190,96 @@ grant execute on function public.portfolio_admin_members(text, text) to authenti
 
 comment on table portfolio_private.admin_members is
   'Delegated portfolio admins. The protected owner is defined in current_actor().';
+
+create table if not exists portfolio_private.site_content (
+  singleton boolean primary key default true check (singleton),
+  content jsonb not null,
+  revision bigint not null default 0,
+  updated_at timestamptz not null default now(),
+  updated_by uuid
+);
+
+alter table portfolio_private.site_content enable row level security;
+alter table portfolio_private.site_content force row level security;
+revoke all on portfolio_private.site_content from public, anon, authenticated;
+
+create or replace function public.portfolio_site_content()
+returns jsonb
+language sql
+security definer
+stable
+set search_path = ''
+as $$
+  select c.content || jsonb_build_object('revision', c.revision)
+  from portfolio_private.site_content c
+  where c.singleton = true;
+$$;
+
+revoke all on function public.portfolio_site_content() from public;
+grant execute on function public.portfolio_site_content() to anon, authenticated;
+
+create or replace function public.portfolio_admin_save_content(
+  new_content jsonb,
+  expected_revision bigint
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  actor jsonb := portfolio_private.current_actor();
+  saved jsonb;
+begin
+  if actor is null then
+    raise exception 'Sign in with an authorized Google account.' using errcode = '42501';
+  end if;
+
+  insert into portfolio_private.site_content (singleton, content, revision, updated_by)
+  values (true, new_content - 'revision', expected_revision + 1, (actor ->> 'userId')::uuid)
+  on conflict (singleton) do update
+    set content = excluded.content,
+        revision = portfolio_private.site_content.revision + 1,
+        updated_at = now(),
+        updated_by = excluded.updated_by
+    where portfolio_private.site_content.revision = expected_revision
+  returning content || jsonb_build_object('revision', revision) into saved;
+
+  if saved is null then
+    raise exception 'Content changed in another tab. Reload before saving.' using errcode = '40001';
+  end if;
+  return saved;
+end;
+$$;
+
+revoke all on function public.portfolio_admin_save_content(jsonb, bigint) from public, anon;
+grant execute on function public.portfolio_admin_save_content(jsonb, bigint) to authenticated;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'portfolio-media',
+  'portfolio-media',
+  true,
+  167772160,
+  array['image/jpeg', 'image/png', 'image/webp', 'application/vnd.android.package-archive', 'application/octet-stream']
+)
+on conflict (id) do update
+set public = excluded.public,
+    file_size_limit = excluded.file_size_limit,
+    allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Portfolio admins upload media" on storage.objects;
+create policy "Portfolio admins upload media"
+on storage.objects for insert to authenticated
+with check (bucket_id = 'portfolio-media' and portfolio_private.current_actor() is not null);
+
+drop policy if exists "Portfolio admins update media" on storage.objects;
+create policy "Portfolio admins update media"
+on storage.objects for update to authenticated
+using (bucket_id = 'portfolio-media' and portfolio_private.current_actor() is not null)
+with check (bucket_id = 'portfolio-media' and portfolio_private.current_actor() is not null);
+
+drop policy if exists "Portfolio admins delete media" on storage.objects;
+create policy "Portfolio admins delete media"
+on storage.objects for delete to authenticated
+using (bucket_id = 'portfolio-media' and portfolio_private.current_actor() is not null);
