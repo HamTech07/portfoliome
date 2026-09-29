@@ -2,10 +2,13 @@ import { ArrowUpRight, CheckCircle2, GraduationCap, MapPin } from "lucide-react"
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
+import { useSite } from "../lib/SiteContext";
 
 const reveal = { duration: 0.4, ease: "easeOut" };
 
 export default function AboutStudio() {
+  const { site } = useSite();
+  const { about, profile } = site;
   const sectionRef = useRef(null);
   const enhancedMotion = useMediaQuery("(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
@@ -25,9 +28,9 @@ export default function AboutStudio() {
             whileTap={{ scale: 0.98 }}
             className="portrait-frame"
           >
-            <img src="/images/Profile1.jpeg" alt="Muhammad Hamdan Amir" loading="lazy" decoding="async" />
+            <img src={profile.portrait} alt={profile.name} loading="lazy" decoding="async" />
             <div className="portrait-caption">
-              <span>Based in Pakistan</span>
+              <span>{profile.location}</span>
               <strong>Building globally</strong>
             </div>
           </motion.div>
@@ -41,19 +44,19 @@ export default function AboutStudio() {
         >
           <div className="section-heading">
             <span>About me</span>
-            <h2>Curious by nature. Precise by practice.</h2>
+            <h2>{about.title}</h2>
           </div>
           <p className="mt-7 text-base leading-8 text-slate-600 dark:text-slate-300 sm:text-lg">
-            I’m Muhammad Hamdan Amir, a Computer Science student and multidisciplinary developer. I enjoy taking a product from its first rough idea to a refined experience—connecting interface detail with the engineering underneath it.
+            {about.intro}
           </p>
           <p className="mt-4 leading-7 text-slate-500 dark:text-slate-400">
-            My work spans full-stack web development, Flutter and React Native app-development skills, Unity game systems and user-centered interface design.
+            {about.description}
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
-              [GraduationCap, "Computer Science", "University of Management & Technology"],
-              [MapPin, "Open to opportunities", "Freelance, internship & full-time"],
+              [GraduationCap, about.education, about.university],
+              [MapPin, "Open to opportunities", about.availability],
               [CheckCircle2, "Product mindset", "Performance, accessibility & polish"],
               [ArrowUpRight, "Continuous learner", "Exploring better ways to build"],
             ].map(([Icon, title, text]) => (

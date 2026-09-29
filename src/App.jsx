@@ -11,15 +11,22 @@ import ScrollProgress from "./components/ScrollProgress";
 import LiveBackground from "./components/LiveBackground";
 import PortfolioAssistant from "./components/PortfolioAssistant";
 import "./components/live-background.css";
+import { SiteProvider, useSite } from "./lib/SiteContext";
+const AdminPanel = lazy(() => import("./components/AdminPanel"));
 
 const Projects = lazy(() => import("./components/Projects"));
 
 export default function App() {
+  return <SiteProvider>{window.location.pathname.replace(/\/$/, "") === "/admin" ? <Suspense fallback={<SectionSkeleton />}><AdminPanel /></Suspense> : <Portfolio />}</SiteProvider>;
+}
+
+function Portfolio() {
+  const { site } = useSite();
   return (
     <ExperienceBoundary>
-      <MotionConfig reducedMotion="user">
+      <MotionConfig reducedMotion={site.appearance.motion ? "user" : "always"}>
       <div className="site-shell min-h-screen">
-        <LiveBackground />
+        {site.appearance.background && <LiveBackground />}
         <ScrollProgress />
         <Navbar />
         <main>
@@ -32,7 +39,7 @@ export default function App() {
           <Contact />
         </main>
         <Footer />
-        <PortfolioAssistant />
+        {site.appearance.assistant && <PortfolioAssistant />}
       </div>
       </MotionConfig>
     </ExperienceBoundary>

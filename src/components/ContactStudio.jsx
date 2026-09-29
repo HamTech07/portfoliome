@@ -1,10 +1,12 @@
 import { ArrowUpRight, BriefcaseBusiness, GitFork, Mail, MessageSquareText, Store } from "lucide-react";
 import { motion } from "framer-motion";
-import { freelanceProfiles } from "../data/portfolio";
+import { useSite } from "../lib/SiteContext";
 
 const reveal = { duration: 0.4, ease: "easeOut" };
 
 export default function ContactStudio() {
+  const { site } = useSite();
+  const { contact, profile: freelanceProfiles } = site;
   return (
     <section id="contact" className="contact-section overflow-hidden">
       <div className="contact-grid" />
@@ -17,15 +19,15 @@ export default function ContactStudio() {
           className="contact-card"
         >
           <div className="max-w-3xl">
-            <span className="contact-eyebrow"><span className="status-dot" /> Available for new projects</span>
-            <h2>Have an idea worth building?</h2>
-            <p>Let’s turn it into a fast, memorable and genuinely useful digital product.</p>
+            <span className="contact-eyebrow"><span className="status-dot" /> {contact.badge}</span>
+            <h2>{contact.title}</h2>
+            <p>{contact.description}</p>
           </div>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <motion.a
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              href="mailto:hamdanamir2005@gmail.com"
+              href={`mailto:${freelanceProfiles.email}`}
               className="primary-button focus:outline-none focus:ring-2 focus:ring-cyan-400"
             >
               <Mail size={18} /> Start a conversation
@@ -33,7 +35,7 @@ export default function ContactStudio() {
             <motion.a
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              href="https://github.com/HamTech07"
+              href={freelanceProfiles.github}
               target="_blank"
               rel="noreferrer"
               className="contact-secondary focus:outline-none focus:ring-2 focus:ring-cyan-400"
@@ -54,8 +56,8 @@ export default function ContactStudio() {
             </motion.a>
           </div>
           <div className="contact-meta">
-            <div><MessageSquareText size={17} /><span>Usually responds within 24–48 hours</span></div>
-            <a href="mailto:hamdanamir2005@gmail.com">hamdanamir2005@gmail.com</a>
+            <div><MessageSquareText size={17} /><span>{contact.response}</span></div>
+            <a href={`mailto:${freelanceProfiles.email}`}>{freelanceProfiles.email}</a>
           </div>
         </motion.div>
       </div>

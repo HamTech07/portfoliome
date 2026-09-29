@@ -2,6 +2,8 @@ import { Bot, LoaderCircle, Send, Sparkles, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import "./portfolio-assistant.css";
+import { portfolioAnswer } from "../lib/portfolio-answers";
+import { useSite } from "../lib/SiteContext";
 
 const reveal = { duration: 0.4, ease: "easeOut" };
 const apiUrl = import.meta.env.VITE_ASSISTANT_API_URL?.trim() || "/api/chat";
@@ -12,12 +14,22 @@ const welcomeMessage = {
   content: "Hi — I’m Hamdan’s portfolio assistant. Ask me about his projects, skills or availability.",
 };
 
+function MessageContent({ content }) {
+  return content.split(/(https:\/\/[^\s]+|\/downloads\/[^\s]+)/g).map((part, index) =>
+    /^(https:\/\/|\/downloads\/)/.test(part)
+      ? <a key={index} href={part} target={part.startsWith("https:") ? "_blank" : undefined} rel="noreferrer" download={part.endsWith(".apk") || undefined}>{part.startsWith("/downloads/") ? "Download Android APK ↗" : part}</a>
+      : part,
+  );
+}
+
 export default function PortfolioAssistant() {
+  const { site } = useSite();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([welcomeMessage]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState("ready");
   const messageEnd = useRef(null);
 
   useEffect(() => {
@@ -51,10 +63,13 @@ export default function PortfolioAssistant() {
         signal: controller.signal,
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error || "The assistant is unavailable right now.");
+      if (!response.ok || typeof payload.message !== "string" || !payload.message.trim()) throw new Error(payload.error || "The assistant is unavailable right now.");
+      setMode(payload.mode === "portfolio" ? "portfolio" : "ai");
       setMessages((current) => [...current, { id: `assistant-${Date.now()}`, role: "assistant", content: payload.message }]);
     } catch (requestError) {
-      setError(requestError.name === "AbortError" ? "The response took too long. Please try again." : requestError.message);
+      setMode("portfolio");
+      setError(requestError.name === "AbortError" ? "AI timed out. Showing saved portfolio information." : "AI is currently unavailable. Showing saved portfolio information.");
+      setMessages((current) => [...current, { id: `assistant-${Date.now()}`, role: "assistant", content: portfolioAnswer(content, site) }]);
     } finally {
       window.clearTimeout(timeout);
       setSending(false);
@@ -77,7 +92,7 @@ export default function PortfolioAssistant() {
           >
             <header className="assistant-header">
               <span className="assistant-avatar"><Bot size={20} /></span>
-              <div><strong id="assistant-title">Ask Hamdan AI</strong><small><i /> Portfolio assistant</small></div>
+              <div><strong id="assistant-title">Ask {site.profile.brand} AI</strong><small><i /> {mode === "portfolio" ? "Portfolio guide · saved answers" : mode === "ai" ? "AI connected" : "Portfolio assistant"}</small></div>
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="button" onClick={() => setOpen(false)} aria-label="Close AI assistant"><X size={18} /></motion.button>
             </header>
 
@@ -85,7 +100,7 @@ export default function PortfolioAssistant() {
               <AnimatePresence initial={false}>
                 {messages.map((message) => (
                   <motion.div key={message.id} className={"assistant-message is-" + message.role} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={reveal}>
-                    {message.content}
+                    <MessageContent content={message.content} />
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -111,7 +126,7 @@ export default function PortfolioAssistant() {
                   {sending ? <LoaderCircle className="assistant-spinner" size={18} /> : <Send size={18} />}
                 </motion.button>
               </div>
-              <small><Sparkles size={12} /> Gemini free-tier ready · avoid sensitive data</small>
+              <small><Sparkles size={12} /> {mode === "portfolio" ? "Saved portfolio facts · AI connection unavailable" : "Ask about Hamdan’s work · avoid sensitive data"}</small>
             </form>
           </motion.section>
         )}

@@ -27,7 +27,10 @@ test("assistant health check and missing-key state are explicit", async () => {
       headers: { "Content-Type": "application/json", Origin: "http://127.0.0.1:5173" },
       body: JSON.stringify({ messages: [{ role: "user", content: "Hello" }] }),
     });
-    assert.equal(chat.status, 503);
+    assert.equal(chat.status, 200);
+    const answer = await chat.json();
+    assert.equal(answer.mode, "portfolio");
+    assert.match(answer.message, /portfolio/);
   });
 });
 

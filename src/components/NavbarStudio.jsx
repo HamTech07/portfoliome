@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import { useSite } from "../lib/SiteContext";
 
 const links = [
   ["#home", "Home"],
@@ -11,16 +12,17 @@ const links = [
 ];
 
 export default function NavbarStudio() {
+  const { site } = useSite();
   const reducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(true);
   const [active, setActive] = useState("home");
 
   useEffect(() => {
-    const useDark = localStorage.getItem("hamdan-theme") !== "light";
+    const useDark = (localStorage.getItem("hamdan-theme") || site.appearance.theme) !== "light";
     setDark(useDark);
     document.documentElement.classList.toggle("dark", useDark);
-  }, []);
+  }, [site.appearance.theme]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,8 +72,8 @@ export default function NavbarStudio() {
           }}
           className="flex items-center gap-2 text-base font-bold tracking-tight text-slate-950 dark:text-white"
         >
-          <span className="logo-mark">H</span>
-          Hamdan<span className="text-cyan-500 dark:text-cyan-300">.dev</span>
+          <span className="logo-mark">{site.profile.logo}</span>
+          {site.profile.brand}<span className="text-cyan-500 dark:text-cyan-300">{site.profile.suffix}</span>
         </a>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">

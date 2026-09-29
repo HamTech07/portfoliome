@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { projects } from "../src/data/portfolio.js";
 
 test("portfolio includes the public Caloverse direct APK download", () => {
-  assert.equal(projects.length, 5);
+  assert.equal(projects.length, 7);
 
   const caloverse = projects.find(({ id }) => id === "caloverse");
   const viewUrl = "https://drive.google.com/file/d/1t2m_4luq1fK0l0W_Eza-j6SX6ar-EgQT/view?usp=drive_link";

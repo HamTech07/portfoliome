@@ -5,7 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    fs: { deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "**/.portfolio-data/**"] },
     proxy: {
+      "/media": { target: "http://127.0.0.1:8787" },
       "/api": {
         target: "http://127.0.0.1:8787",
         changeOrigin: false,

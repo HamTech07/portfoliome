@@ -1,6 +1,7 @@
 import { Bot, Code2, Radio, Smartphone, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useSite } from "../lib/SiteContext";
 
 const reveal = { duration: 0.4, ease: "easeOut" };
 
@@ -11,6 +12,8 @@ const nodes = [
 ];
 
 export default function HeroSignal() {
+  const { site } = useSite();
+  const { projects, profile } = site;
   const signalRef = useRef(null);
 
   useEffect(() => {
@@ -41,8 +44,8 @@ export default function HeroSignal() {
           <strong><Radio size={13} /> Live product system</strong>
         </div>
         <div className="signal-window-body">
-          <div className="signal-brand"><span>H</span><div><strong>Hamdan Studio</strong><small>Design → build → ship</small></div></div>
-          <div className="signal-score"><Sparkles size={16} /><strong>04</strong><span>products shipped</span></div>
+          <div className="signal-brand"><span>{profile.logo}</span><div><strong>{profile.brand} Studio</strong><small>Design → build → ship</small></div></div>
+          <div className="signal-score"><Sparkles size={16} /><strong>{String(projects.length).padStart(2, "0")}</strong><span>featured projects</span></div>
           <div className="signal-bars" aria-hidden="true"><i /><i /><i /></div>
           <div className="signal-status"><span><i /> Portfolio system online</span><small>Web · Mobile · AI · UI/UX</small></div>
         </div>

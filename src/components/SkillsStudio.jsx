@@ -1,7 +1,7 @@
 import { ArrowUpRight, Bot, Code2, Download, Gamepad2, Layers3, PenTool, Smartphone, Workflow, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { capabilities, projects } from "../data/portfolio";
+import { useSite } from "../lib/SiteContext";
 import WorkingStack from "./WorkingStack";
 import "./working-stack.css";
 import "./capability-dialog.css";
@@ -55,7 +55,8 @@ function ProjectTile({ project }) {
 
   return (
     <motion.a
-      href={project.downloadUrl ?? project.url}
+      href={project.downloadUrl || project.url}
+      download={project.downloadUrl ? project.downloadName || undefined : undefined}
       target="_blank"
       rel="noreferrer"
       whileHover={{ scale: 1.02 }}
@@ -96,12 +97,14 @@ function CaloverseGallery() {
 }
 
 export default function SkillsStudio() {
+  const { site } = useSite();
+  const { capabilities, projects } = site;
   const [selectedKey, setSelectedKey] = useState(null);
   const selectedCapability = useMemo(
     () => capabilities.find(({ key }) => key === selectedKey) ?? null,
-    [selectedKey],
+    [selectedKey, capabilities],
   );
-  const selectedWork = selectedKey ? capabilityWork[selectedKey] : null;
+  const selectedWork = selectedKey ? { ...capabilityWork[selectedKey], ...(["web", "mobile", "automation"].includes(selectedKey) ? { projectIds: projects.filter((project) => selectedKey === "mobile" ? Boolean(project.downloadUrl) || project.category === "Mobile App" : selectedKey === "automation" ? project.category === "AI Automation" : !project.downloadUrl && project.category !== "Mobile App").map((project) => project.id) } : {}) } : null;
 
   useEffect(() => {
     if (!selectedCapability) return undefined;
@@ -122,8 +125,8 @@ export default function SkillsStudio() {
       <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={reveal} className="section-heading">
           <span>Capabilities</span>
-          <h2>One developer. Multiple dimensions.</h2>
-          <p>Open a capability to see the products and interface work behind it.</p>
+          <h2>{site.headings.skills}</h2>
+          <p>{site.headings.skillsDescription}</p>
         </motion.div>
 
         <div className="mt-14 grid gap-4 md:grid-cols-2">

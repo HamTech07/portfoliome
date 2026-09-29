@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "test": "node --test scripts/*.test.js",
-    "dev": "vite",
-    "server": "node server/index.js",
+    "dev": "node scripts/dev.js",
+    "dev:frontend": "vite",
+    "server": "node --env-file-if-exists=.env server/index.js",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.117.2",
     "@tailwindcss/vite": "^4.3.3",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.37.0",
@@ -20,7 +22,7 @@
     "tailwindcss": "^4.3.3"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.9"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

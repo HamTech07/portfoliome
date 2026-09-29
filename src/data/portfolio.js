@@ -48,6 +48,30 @@ export const capabilities = [
 
 export const projects = [
   {
+    id: "techora", number: "06", title: "Techora Pakistan",
+    category: "Web Experience",
+    description: "A live website for Techora Pakistan. Explore the complete experience on the official site.",
+    url: "https://techorapakistan.com/",
+    tags: ["Website", "Pakistan", "Web Experience"], accent: "cyan",
+    role: "Website project",
+    challenge: "Bring Techora Pakistan online with a dedicated web presence.",
+    solution: "A published website accessible from the portfolio with one click.",
+    highlights: ["Live website", "Dedicated domain", "Web experience"],
+  },
+  {
+    id: "rock-ai", number: "07", title: "Rock AI Detective",
+    category: "Mobile App",
+    description: "An Android app for exploring rocks and minerals with AI. Download the installable Android build directly.",
+    url: "https://expo.dev/accounts/ham-tech07/projects/rock-ai-expo/builds/8539df76-80c3-444a-9895-03707b04233b",
+    downloadUrl: "/downloads/rock-ai-detective.apk",
+    downloadName: "rock-ai-detective.apk", domain: "Android APK",
+    tags: ["React Native", "Expo", "AI", "Android"], accent: "violet",
+    role: "AI mobile app development",
+    challenge: "Bring AI-assisted rock and mineral exploration to a mobile experience.",
+    solution: "An Android application built with React Native and Expo, available as a downloadable APK.",
+    highlights: ["AI-assisted exploration", "Android application", "Direct APK download"],
+  },
+  {
     id: "juna",
     number: "01",
     title: "Juna Store",

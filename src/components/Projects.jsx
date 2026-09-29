@@ -1,18 +1,20 @@
-import { ArrowUpRight, Bot, CheckCircle2, Download, Eye, Leaf, ShoppingBag, Smartphone, Trophy, X } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Download, Eye, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { projects } from "../data/portfolio";
+import { useSite } from "../lib/SiteContext";
+import ProjectPreview from "./ProjectPreview";
 
-const filters = ["All", "Commerce", "Web Experience", "Tournament Platform", "Mobile App", "AI Automation"];
-const icons = { juna: ShoppingBag, ecourish: Leaf, besports: Trophy, caloverse: Smartphone, "ai-agile": Bot };
 const reveal = { duration: 0.4, ease: "easeOut" };
 
 export default function Projects() {
+  const { site } = useSite();
+  const projects = site.projects;
+  const filters = ["All", ...new Set(projects.map((project) => project.category))];
   const [filter, setFilter] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
   const visibleProjects = useMemo(
     () => filter === "All" ? projects : projects.filter((project) => project.category === filter),
-    [filter],
+    [filter, projects],
   );
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function Projects() {
   }, [selectedProject]);
 
   return (
-    <section id="projects" className="section-shell section-tinted overflow-hidden">
+    <section id="projects" className="section-shell section-tinted overflow-clip">
       <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <div className="grid gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-16">
           <motion.div
@@ -42,8 +44,8 @@ export default function Projects() {
           >
             <div className="section-heading">
               <span>Selected work</span>
-              <h2>Live ideas, shipped to the web.</h2>
-              <p>Five focused products across web, mobile and AI automation, shaped around usability, responsiveness and a clear visual identity.</p>
+              <h2>{site.headings.projects}</h2>
+              <p>{site.headings.projectsDescription}</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-2" aria-label="Filter projects">
               {filters.map((item) => (
@@ -64,16 +66,18 @@ export default function Projects() {
           <motion.div layout="position" layoutDependency={filter} className="grid gap-4">
             <AnimatePresence mode="popLayout">
               {visibleProjects.map((project, index) => {
-                const Icon = icons[project.id];
                 return (
                   <motion.article
                     layout="position"
                     layoutDependency={filter}
                     key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 48, scale: 0.97 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.12 }}
+                    onViewportEnter={(entry) => entry?.target.classList.add("is-in-view")}
+                    onViewportLeave={(entry) => entry?.target.classList.remove("is-in-view")}
                     exit={{ opacity: 0, y: 20 }}
-                    transition={{ ...reveal, delay: index * 0.05 }}
+                    transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: Math.min(index * 0.025, 0.1) }}
                     className={"project-card accent-" + project.accent}
                   >
                     {project.downloadUrl ? <motion.a
@@ -87,7 +91,7 @@ export default function Projects() {
                       aria-label={"Download " + project.title + " Android APK"}
                     >
                       <span className="project-number">{project.number}</span>
-                      <div className="project-glyph"><Icon size={30} /></div>
+                      {project.image ? <img className="project-cover" src={project.image} alt={project.title} loading="lazy" /> : <ProjectPreview project={project} />}
                       <span className="project-domain"><Download size={13} /> {project.domain}</span>
                     </motion.a> : <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -97,8 +101,8 @@ export default function Projects() {
                       aria-label={"Open details for " + project.title}
                     >
                       <span className="project-number">{project.number}</span>
-                      <div className="project-glyph"><Icon size={30} /></div>
-                      <span className="project-domain">{new URL(project.url).hostname}</span>
+                      {project.image ? <img className="project-cover" src={project.image} alt={project.title} loading="lazy" /> : <ProjectPreview project={project} />}
+                      <span className="project-domain">{new URL(project.url, window.location.origin).hostname}</span>
                     </motion.button>}
                     <div className="project-content">
                       <span className="card-eyebrow">{project.category}</span>
@@ -120,10 +124,10 @@ export default function Projects() {
                         <motion.a
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          href={project.downloadUrl ?? project.url}
+                          href={project.downloadUrl || project.url}
                           target="_blank"
                           rel="noreferrer"
-                          download={project.downloadName}
+                          download={project.downloadUrl ? project.downloadName || undefined : undefined}
                           className="project-link"
                           aria-label={project.downloadUrl ? "Download " + project.title + " Android APK" : "Open " + project.title + " live website"}
                         >
@@ -192,7 +196,7 @@ export default function Projects() {
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.tags.map((tag) => <span key={tag} className="stack-pill">{tag}</span>)}
                 </div>
-                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.downloadUrl ?? selectedProject.url} target="_blank" rel="noreferrer" download={selectedProject.downloadName} className="primary-button">
+                <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={selectedProject.downloadUrl || selectedProject.url} target="_blank" rel="noreferrer" download={selectedProject.downloadName || undefined} className="primary-button">
                   {selectedProject.downloadUrl ? <><Download size={17} /> Download Android APK</> : <>Open {selectedProject.liveLabel?.toLowerCase() ?? "live website"} <ArrowUpRight size={17} /></>}
                 </motion.a>
               </div>
