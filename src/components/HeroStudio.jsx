@@ -1,4 +1,4 @@
-import { ArrowDownRight, ArrowUpRight, GitFork, Layers3, Sparkles, Workflow } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Download, GitFork, Layers3, Sparkles, Workflow } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import HeroSignal from "./HeroSignal";
@@ -44,13 +44,23 @@ function HeroCopy() {
         {hero.description}
       </motion.p>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...reveal, delay: 0.24 }} className="mt-9 flex flex-col gap-3 sm:flex-row">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...reveal, delay: 0.24 }} className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href="#projects" className="primary-button focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950">
           {hero.button} <ArrowDownRight size={18} />
         </motion.a>
         <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href={profile.github} target="_blank" rel="noreferrer" className="secondary-button focus:outline-none focus:ring-2 focus:ring-cyan-400">
           <GitFork size={18} /> GitHub <ArrowUpRight size={16} />
         </motion.a>
+        <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} href="/downloads/Hamdan-Amir-Resume.docx" download="Hamdan-Amir-Resume.docx" className="secondary-button focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      <Download size={18} /> Download Resume
+    </motion.a>
+    <motion.a
+        href="/downloads/Hamdan-Amir-Portfolio.pdf"
+        download="Hamdan-Amir-Portfolio.pdf"
+        className="secondary-button inline-flex items-center gap-2"
+      >
+        <Download size={18} /> Download Portfolio
+    </motion.a>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...reveal, delay: 0.32 }} className="hero-metrics mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-3">
