@@ -1,5 +1,6 @@
 import { ArrowDownRight, ArrowUpRight, GitFork, Layers3, Sparkles, Workflow } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import HeroSignal from "./HeroSignal";
 import { useSite } from "../lib/SiteContext";
 import "./hero-scroll.css";
@@ -8,15 +9,34 @@ const reveal = { duration: 0.4, ease: "easeOut" };
 
 function HeroCopy() {
   const { site } = useSite();
+  const reducedMotion = useReducedMotion();
+  const [typedTitle, setTypedTitle] = useState("");
   const { projects, hero, profile } = site;
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setTypedTitle(hero.title);
+      return undefined;
+    }
+
+    setTypedTitle("");
+    let position = 0;
+    const timer = window.setInterval(() => {
+      position += 1;
+      setTypedTitle(hero.title.slice(0, position));
+      if (position >= hero.title.length) window.clearInterval(timer);
+    }, 85);
+
+    return () => window.clearInterval(timer);
+  }, [hero.title, reducedMotion]);
   return (
     <div className="hero-copy-layer max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={reveal} className="eyebrow mb-6">
         <span className="status-dot" /> {hero.badge}
       </motion.div>
 
-      <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...reveal, delay: 0.08 }} className="display-title">
-        {hero.title}
+      <motion.h1 aria-label={`${hero.title} ${hero.highlight}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={reveal} className="display-title">
+        <span aria-hidden="true">{typedTitle}{!reducedMotion && typedTitle.length < hero.title.length && <span className="type-caret" />}</span>
         <span className="gradient-text block">{hero.highlight}</span>
       </motion.h1>
 

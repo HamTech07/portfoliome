@@ -23,6 +23,6 @@ export const defaultSite = {
   },
   contact: { badge: "Available for new projects", title: "Have an idea worth building?", description: "Let’s turn it into a fast, memorable and genuinely useful digital product.", response: "Usually responds within 24–48 hours" },
   headings: { skills: "One developer. Multiple dimensions.", skillsDescription: "Open a capability to see the products and interface work behind it.", projects: "Live ideas, shipped to the web.", projectsDescription: "Explore focused products across web, mobile and AI automation. Try a live experience or take an Android app with you." },
-  appearance: { background: true, motion: true, assistant: true, theme: "dark", accent: "#22d3ee" },
+  appearance: { background: true, motion: true, assistant: true, theme: "light", accent: "#b85d3f" },
   projects, capabilities,
 };

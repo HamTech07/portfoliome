@@ -21,7 +21,7 @@
 }
 .capability-copy { position: relative; z-index: 1; }
 .capability-copy > p { margin-top: 4rem; max-width: 39rem; color: #d2deec; line-height: 1.75; }
-.capability-photo-card .card-eyebrow { color: #a5f3fc; }
+.capability-photo-card .card-eyebrow { color: #f0c5a8; }
 .capability-photo-card .capability-icon { background: #101522; }
 .capability-photo-card .stack-pill { color: #f1f5f9; background: #182334; border-color: #39485c; }
 
@@ -42,7 +42,7 @@
 .working-stack-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; padding: 1.75rem 1.75rem 0; }
 .working-stack-header .card-eyebrow { display: flex; align-items: center; gap: 0.45rem; }
 .working-stack-header h3 { margin-top: 0.5rem; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.05em; }
-.working-stack-header h3 > span { color: #0891b2; }
+.working-stack-header h3 > span { color: #55745d; }
 .working-stack-header p { margin-top: 0.4rem; color: #64748b; font-size: 0.85rem; }
 .dark .working-stack-header p { color: #94a3b8; }
 .orbit-controls { display: flex; align-items: center; gap: 0.5rem; }
@@ -61,7 +61,7 @@
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 .dark .orbit-controls button { color: #dbeafe; background: #141e2d; border-color: #2e3e53; }
-.orbit-controls button:hover { border-color: #0891b2; background: #ecfeff; }
+.orbit-controls button:hover { border-color: #55745d; background: #f3e2d3; }
 .dark .orbit-controls button:hover { background: #183143; }
 .orbit-controls .orbit-play { padding: 0 0.9rem; font-size: 0.75rem; font-weight: 700; }
 .orbit-controls button:disabled { cursor: default; opacity: 0.65; }
@@ -126,7 +126,7 @@
 .orbit-status { display: inline-flex; align-items: center; gap: 0.5rem; color: #64748b; font-size: 0.65rem; font-weight: 700; }
 .dark .orbit-status { color: #94a3b8; }
 .orbit-status i { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; }
-.orbit-status i.is-live { background: #0891b2; }
+.orbit-status i.is-live { background: #55745d; }
 .stack-directory { border-top: 1px solid #d6deeb; padding: 1.25rem 1.75rem; }
 .dark .stack-directory { border-color: #253145; }
 .stack-directory summary { cursor: pointer; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0; }
